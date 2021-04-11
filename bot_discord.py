@@ -65,11 +65,8 @@ async def on_message(message):
                 str_author = str(message.author)
                 if not os.path.exists(str_author):
                     os.makedirs(str_author)
-                year = datetime.now().year
-                month = datetime.now().month
-                day = datetime.now().day
                 target_answerers[message.author].save_conversation_data(
-                    f"{str_author}/{str_author}_{year}{month}{day}_{session_count[message.author]}.csv")
+                    f"{str_author}/{str_author}_{datetime.now()}_{session_count[message.author]}.csv")
                 print()
             else:
                 print("normal_message")
@@ -79,7 +76,7 @@ async def on_message(message):
                 response = session_answerer.get_answer()
                 response_time = max(1.0, 0.2*len(message.content.split(" ")))
                 time.sleep(response_time)
-                response += f" ({response_time} s)"
+                # response += f" ({response_time} s)"
                 await message.channel.send(response)
     else:
         await message.channel.send(f"Venez discutez par message privé !")
