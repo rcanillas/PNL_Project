@@ -63,10 +63,10 @@ async def on_message(message):
                 await message.channel.send(f"Bonne journée {target_name} !")
                 active_sessions[message.author] = False
                 str_author = str(message.author)
-                if not os.path.exists(str_author):
-                    os.makedirs(str_author)
+                if not os.path.exists(f"conv_data/{str_author}"):
+                    os.makedirs(f"conv_data/{str_author}")
                 target_answerers[message.author].save_conversation_data(
-                    f"{str_author}/{str_author}_{datetime.now()}_{session_count[message.author]}.csv")
+                    f"conv_data/{str_author}/{str_author}_{datetime.now()}_{session_count[message.author]}.csv")
                 print()
             else:
                 print("normal_message")
