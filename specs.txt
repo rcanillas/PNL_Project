@@ -25,7 +25,7 @@ Aller vers / Éviter de
 Proactif / Réactif
 Référence interne / Référence externe
 Séquentiel / Simultané
-Match / Mismatch
+Match / Mismatch (par rapport à une personne)
 Dans le temps / A travers le temps
 Associé / Dissocié
 Similitude / Différence

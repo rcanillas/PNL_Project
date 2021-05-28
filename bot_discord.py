@@ -32,12 +32,21 @@ async def on_ready():
 async def on_message(message):
     bot_name = str(client.user).split("#")[0]
     target_name = str(message.author).split("#")[0]
-
-    if message.author not in target_modelers.keys():
-        target_modelers[message.author] = Modeler(target_name)
+    str_author = str(message.author)
+    prefix = "user_data"
 
     if message.author == client.user:
         return
+
+    if message.author not in target_modelers.keys():
+        target_modelers[message.author] = Modeler(target_name)
+        if not os.path.exists(f"{prefix}/{str_author}"):
+            os.makedirs(f"{prefix}/{str_author}")
+        target_modelers[message.author].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
+
+    else:
+        target_modelers[message.author] = Modeler(target_name)
+        target_modelers[message.author].load_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
 
     if message.channel.type == discord.ChannelType.private:
         # print(message.author)
@@ -68,8 +77,6 @@ async def on_message(message):
                 time.sleep(1)
                 await message.channel.send(f"Bonne journée {target_name} !")
                 active_sessions[message.author] = False
-                str_author = str(message.author)
-                prefix = "user_data"
                 if not os.path.exists(f"{prefix}/{str_author}"):
                     os.makedirs(f"{prefix}/{str_author}")
                 print(target_modelers[message.author].profile)
