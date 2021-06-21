@@ -4,8 +4,9 @@ from sklearn.neighbors import NearestNeighbors
 
 
 class ResponseStrategy:
-    def __init__(self, strategy="random", nn_model):
+    def __init__(self, strategy="random", nn_model=None):
         self.strategy = strategy
+        self.nn_model = None
 
     def select_answer(self, answer_list, target_profile):
         if self.strategy == "random":

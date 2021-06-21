@@ -42,5 +42,14 @@ Liste de questions pour creuser les programmes ?
 Focalisation sur les verbes ?
 Attention à ne pas mélanger plusieurs cycles de méta-programmes.
 Approche "séquentielle" de la situation. Plusieurs problèmes ?
-Chunk up -> vers le détail  / Chunk down -> vers le détail
+Chunk up -> vers le global  / Chunk down -> vers le détail
 Représentation vs réalité. Représentation déformée.
+
+#Todo June
+- ~~fix l'enregistrement du profil~~
+- Faire des réponses à partir des profils
+~~- Un fichier par "groupe" de méta-programme, quand on regroupe, les mps non-présents sont automatiquement à 0~~
+- Grouper les méta-programme
+- Caching des questions pertinentes, recalcul si la question est toujours pertinente.
+Plus tard :
+- Cadrer l'utilisateur en le focalisant sur le contexte du problème - ex, problème au travail puis on parle de la famille après -> Calcul du contexte

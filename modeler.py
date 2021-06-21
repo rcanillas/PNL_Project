@@ -1,10 +1,22 @@
 import json
+import os
+
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from sklearn.feature_extraction.text import CountVectorizer
 
-ref_metaprograms = pd.read_csv("meta_program_ref.csv")
-meta_programs = list(ref_metaprograms.keys()[:-1])
+temp_metaprograms = pd.DataFrame()
+prefix = "knowledge_mp"
+for meta_program_file in os.listdir(prefix):
+    print(meta_program_file)
+    meta_program_df = pd.read_csv(prefix+"/"+meta_program_file)
+    temp_metaprograms = temp_metaprograms.append(meta_program_df, sort=True)
+temp_metaprograms = temp_metaprograms.fillna(0)
+ref_metaprograms = temp_metaprograms.groupby(by="sentence").sum().reset_index()
+ref_metaprograms.index.set_names(['sentence'])
+print(ref_metaprograms.info())
+#print(ref_metaprograms)
+meta_programs = list(ref_metaprograms.drop("sentence", axis=1).keys())
 corpus = ref_metaprograms["sentence"]
 vectorizer = CountVectorizer()
 transf_corpus = vectorizer.fit_transform(corpus)
@@ -22,7 +34,7 @@ class Modeler:
     def __compute_profile(self, msg):
         print("computing profile")
         print(msg)
-        transf_msg = vectorizer.transform([msg["message"]]).toarray()
+        transf_msg = vectorizer.transform([msg]).toarray()
         print(transf_msg, sum(transf_msg[0]))
         print(transf_msg[0], transf_msg[0].any())
         if not transf_msg[0].any():
@@ -30,19 +42,21 @@ class Modeler:
         else:
             distances, indices = self.model.kneighbors(transf_msg)
             ref_indice = indices[0][0]
+            print(ref_metaprograms.iloc[ref_indice])
             profile = ref_metaprograms.iloc[ref_indice].drop("sentence")
         for key in self.profile:
-            self.profile[key] += profile[key]
+            self.profile[key] += int(profile[key])
         print(self.profile)
         return self
 
     def update_profile(self, msg_list):
-        for msg in msg_list.to_dict(orient="records"):
+        for msg in msg_list.split('.'):
             self.__compute_profile(msg)
         return self
 
     def save_profile(self, path):
         with open(path, "w") as out_file:
+            print(self.profile)
             json.dump(self.profile, out_file)
         return self
 

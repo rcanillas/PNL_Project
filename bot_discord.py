@@ -38,16 +38,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.author not in target_modelers.keys():
-        target_modelers[message.author] = Modeler(target_name)
-        if not os.path.exists(f"{prefix}/{str_author}"):
-            os.makedirs(f"{prefix}/{str_author}")
-        target_modelers[message.author].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
-
-    else:
-        target_modelers[message.author] = Modeler(target_name)
-        target_modelers[message.author].load_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
-
     if message.channel.type == discord.ChannelType.private:
         # print(message.author)
         if message.author not in active_sessions.keys():
@@ -55,8 +45,16 @@ async def on_message(message):
             session_count[message.author] = 0
 
         if not active_sessions[message.author]:
-            if message.content == f"Bonjour {bot_name}":
+            if f"Bonjour {bot_name}" in message.content:
                 active_sessions[message.author] = True
+                if message.author not in target_modelers.keys():
+                    target_modelers[message.author] = Modeler(target_name)
+                    if not os.path.exists(f"{prefix}/{str_author}"):
+                        os.makedirs(f"{prefix}/{str_author}")
+                    target_modelers[message.author].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
+                else:
+                    target_modelers[message.author].load_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
+
                 time.sleep(1)
                 await message.channel.send(f"Bonjour {target_name} !")
                 session_count[message.author] += 1
@@ -87,7 +85,7 @@ async def on_message(message):
                 print("normal_message")
                 session_answerer = target_answerers[message.author]
                 session_answerer.update_conversation(message.content)
-                target_modelers[message.author] = target_modelers[message.author].update_profile(session_answerer.conversation_data)
+                target_modelers[message.author] = target_modelers[message.author].update_profile(message.content)
                 # TODO: update target model here
                 response = session_answerer.get_answer()
                 response_time = max(1.0, 0.2*len(message.content.split(" ")))
