@@ -15,7 +15,6 @@ temp_metaprograms = temp_metaprograms.fillna(0)
 ref_metaprograms = temp_metaprograms.groupby(by="sentence").sum().reset_index()
 ref_metaprograms.index.set_names(['sentence'])
 print(ref_metaprograms.info())
-#print(ref_metaprograms)
 meta_programs = list(ref_metaprograms.drop("sentence", axis=1).keys())
 corpus = ref_metaprograms["sentence"]
 vectorizer = CountVectorizer()

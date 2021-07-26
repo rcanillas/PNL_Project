@@ -2,18 +2,24 @@ import pandas as pd
 import random
 from sklearn.neighbors import NearestNeighbors
 
+answer_list = pd.read_csv("answer_list.csv")
+answ_corpus = answer_list.drop(["text"], axis=1)
+nn_model = NearestNeighbors(n_neighbors=1, algorithm='brute').fit(answ_corpus)
+
 
 class ResponseStrategy:
-    def __init__(self, strategy="random", nn_model=None):
+    def __init__(self, strategy="random"):
         self.strategy = strategy
-        self.nn_model = None
 
     def select_answer(self, answer_list, target_profile):
         if self.strategy == "random":
             return random.choice(answer_list["text"].values)
         if self.strategy == "nearest_neighbors":
             print(target_profile)
-            answer = ""
+            distances, indices = nn_model.kneighbors([list(target_profile.values())])
+            ref_answer = indices[0][0]
+            print(ref_answer, indices)
+            answer = answer_list.iloc[ref_answer]['text']
             return answer
 
 
@@ -21,7 +27,7 @@ class Answerer:
     def __init__(self, session):
         self.session = session
         self.conversation_data = pd.DataFrame()
-        self.response_strategy = ResponseStrategy()
+        self.response_strategy = ResponseStrategy(strategy="nearest_neighbors")
         self.answer_list = pd.DataFrame()
         self.target_profile = None
         self.nn_model = None

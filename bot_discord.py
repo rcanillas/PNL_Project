@@ -85,8 +85,9 @@ async def on_message(message):
                 print("normal_message")
                 session_answerer = target_answerers[message.author]
                 session_answerer.update_conversation(message.content)
-                target_modelers[message.author] = target_modelers[message.author].update_profile(message.content)
-                # TODO: update target model here
+                session_modeler = target_modelers[message.author]
+                session_modeler = session_modeler.update_profile(message.content)
+                session_answerer.update_target_profile(session_modeler.profile)
                 response = session_answerer.get_answer()
                 response_time = max(1.0, 0.2*len(message.content.split(" ")))
                 time.sleep(response_time)
