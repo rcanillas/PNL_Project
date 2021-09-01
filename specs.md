@@ -118,6 +118,7 @@ Coder les protocoles de coaching ? en v2. Modéliser les émotions ? potentielle
 Comment faire le remplissage ?
 1. Phrases de référence pour les méta-programmes
 2. Questions du bot en fonction des profils utilisateurs. 
+
 ### Phrases de référence
 - Première source: phrases d'exemple de bouquins de PNL + sites de PNL 
 Faire ça sur un méta-programme au début: actif-passif.
@@ -144,3 +145,21 @@ Questions "froides" pour permettre de "ranger" les phrases. Où trouver ces ques
   
 Trouver des variations pour chaque niveau + pour les "types" de personnalité (tactile, vue, etc VAKOG). Socle.
 Mettre en place un "compteur" -> si la réponse est "courte" rester sur le même niveau.
+
+## Discussion 13/08
+Coaching écrit vs oral -> la personne a le temps d'écrire ce qu'elle veut. 
+Mettre en place un nombre de caractère minimum car possibilité d'écrire plusieurs messages.
+Plus de temps de réflexion à l'écrit.
+Deux facons de détecter: longueur du message. Un message = un bloc avec plusieurs phrases. Changement de comportement -> entrée = point 
+Quantité "max" (exemple) = 13 phrases (moyenne +/- 6 à 10 phrases). 
+OU "timing" entre les messages. 
+OU changement de méta-programme.
+Au début les gens sont très généraux -> déconstuire l'a-priori en fixant sur un exemple précis.
+"Peux-tu donner l'exemple le plus représentatif pour toi ?' 'Peux-tu donner un exemple le plus précis possible ?'
+Il faut un temps pour digérer les choses -> coaching tous les mois.
+
+## Discussion 17/08
+Ce qui est important c'est l'addition **ou** la contradiction qui sont intéressant.
+Le message qui explique le problème / métaprogrammes / contradiction.
+Isoler les "décrochages" => Incongruences
+Passe présent / futur / passé

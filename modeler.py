@@ -16,9 +16,10 @@ ref_metaprograms = temp_metaprograms.groupby(by="sentence").sum().reset_index()
 ref_metaprograms.index.set_names(['sentence'])
 print(ref_metaprograms.info())
 meta_programs = list(ref_metaprograms.drop("sentence", axis=1).keys())
-corpus = ref_metaprograms["sentence"]
+corpus = ref_metaprograms["sentence"].dropna()
 vectorizer = CountVectorizer()
-transf_corpus = vectorizer.fit_transform(corpus)
+#print(corpus)
+transf_corpus = vectorizer.fit_transform(corpus.values)
 print(transf_corpus.toarray())
 print(vectorizer.get_feature_names())
 
