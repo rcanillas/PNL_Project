@@ -16,6 +16,7 @@ session_count = {}
 msg_count = {}
 target_answerers = {}
 target_modelers = {}
+sentence_buffer = {}
 
 
 @client.event
@@ -49,6 +50,7 @@ async def on_message(message):
         if not active_sessions[target_name]:
             if f"Bonjour {bot_name}" in message.content:
                 active_sessions[target_name] = True
+                sentence_buffer[target_name] = ""
                 if target_name not in target_modelers.keys():
                     target_modelers[target_name] = Modeler(target_name)
                     if not os.path.exists(f"{prefix}/{str_author}"):
@@ -79,28 +81,45 @@ async def on_message(message):
                     os.makedirs(f"{prefix}/{str_author}")
                 print(target_modelers[target_name].profile)
                 target_answerers[target_name].save_conversation_data(
-                    f"{prefix}/{str_author}/{str_author}_{datetime.now()}_{session_count[message.author]}.csv")
+                    f"{prefix}/{str_author}/{str_author}_{datetime.now()}_{session_count[target_name]}.csv")
                 target_modelers[target_name].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
             else:
                 print("normal_message")
-                if "." in message.content:
-                    nb_sentences = len(message.content.split("."))
-                    sentence_count = nb_sentences
-                else:
-                    sentence_count = 1
-                print(sentence_count)
+                print(sentence_buffer[target_name])
                 session_answerer = target_answerers[target_name]
-                session_answerer.update_conversation(message.content)
                 session_modeler = target_modelers[target_name]
-                session_modeler = session_modeler.update_profile(message.content)
-                session_answerer.update_target_profile(session_modeler.profile)
-                msg_count[target_name] += sentence_count
-                print(msg_count[target_name])
-                session_answerer.nb_answers = msg_count[target_name]
-                response = session_answerer.get_answer()
-                response_time = max(1.0, 0.2*len(message.content.split(" ")))
-                time.sleep(response_time)
-                await message.channel.send(response)
+                if "." in message.content:
+                    sentence_list = [msg for msg in message.content.split(".")]
+                    if sentence_buffer[target_name] != "":
+                        current_sentence = sentence_buffer[target_name] + ' ' + sentence_list[0]
+                    else:
+                        current_sentence = sentence_list[0]
+                    session_answerer.update_conversation(current_sentence)
+                    session_modeler = session_modeler.update_profile(current_sentence)
+                    session_answerer.update_target_profile(session_modeler.profile)
+                    sentence_buffer[target_name] = ""
+                    msg_count[target_name] += len(sentence_list[:-1])
+                    for current_sentence in sentence_list[1:-1]:
+                        session_answerer.update_conversation(current_sentence)
+                        session_modeler = session_modeler.update_profile(current_sentence)
+                        session_answerer.update_target_profile(session_modeler.profile)
+                    if sentence_list[-1] == "":
+                        sentence_buffer[target_name] = ""
+                        session_answerer.nb_answers = msg_count[target_name]
+                        response = session_answerer.get_answer()
+                        response_time = max(1.0, 0.2 * len(message.content.split(" ")))
+                        time.sleep(response_time)
+                        await message.channel.send(response)
+                    else:
+                        sentence_buffer[target_name] = sentence_list[-1]
+                else:
+                    if sentence_buffer[target_name] != "":
+                        sentence_buffer[target_name] = sentence_buffer[target_name] + ' ' + message.content
+                    else:
+                        sentence_buffer[target_name] = message.content
+
+
+
     else:
         await message.channel.send(f"Venez discutez par message privé !")
 
