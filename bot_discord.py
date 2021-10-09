@@ -13,7 +13,7 @@ GUILD = os.getenv('DISCORD_GUILD')
 client = discord.Client()
 active_sessions = {}
 session_count = {}
-sentence_count = {}
+msg_count = {}
 target_answerers = {}
 target_modelers = {}
 
@@ -32,34 +32,36 @@ async def on_ready():
 @client.event
 async def on_message(message):
     bot_name = str(client.user).split("#")[0]
-    target_name = str(message.author).split("#")[0]
+    target_name = str(message.author.name)
     str_author = str(message.author)
     prefix = "user_data"
     if message.author == client.user:
         return
     if message.channel.type == discord.ChannelType.private:
-        # print(message.author)
-        if message.author not in active_sessions.keys():
-            active_sessions[message.author] = False
-            session_count[message.author] = 0
-            sentence_count[message.author] = 0
+        print(target_name)
+        print(active_sessions.keys())
+        if target_name not in active_sessions.keys():
+            # print("session not active")
+            active_sessions[target_name] = False
+            session_count[target_name] = 0
+            msg_count[target_name] = 0
 
-        if not active_sessions[message.author]:
+        if not active_sessions[target_name]:
             if f"Bonjour {bot_name}" in message.content:
-                active_sessions[message.author] = True
-                if message.author not in target_modelers.keys():
-                    target_modelers[message.author] = Modeler(target_name)
+                active_sessions[target_name] = True
+                if target_name not in target_modelers.keys():
+                    target_modelers[target_name] = Modeler(target_name)
                     if not os.path.exists(f"{prefix}/{str_author}"):
                         os.makedirs(f"{prefix}/{str_author}")
-                    target_modelers[message.author].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
+                    target_modelers[target_name].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
                 else:
-                    target_modelers[message.author].load_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
+                    target_modelers[target_name].load_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
                 time.sleep(1)
                 await message.channel.send(f"Bonjour {target_name} !")
-                session_count[message.author] += 1
+                session_count[target_name] += 1
                 session_answerer = Answerer(session_count)
                 session_answerer.load_answer_list("templates/meta_answers.csv")
-                target_answerers[message.author] = session_answerer
+                target_answerers[target_name] = session_answerer
                 # TODO: Potentiellement demander si prise en compte des conversations passées si nb session > 1
                 time.sleep(1.5)
                 await message.channel.send(f"De quoi allons-nous parler aujourd'hui ?")
@@ -72,28 +74,30 @@ async def on_message(message):
                 print("end_message")
                 time.sleep(1)
                 await message.channel.send(f"Bonne journée {target_name} !")
-                active_sessions[message.author] = False
+                active_sessions[target_name] = False
                 if not os.path.exists(f"{prefix}/{str_author}"):
                     os.makedirs(f"{prefix}/{str_author}")
-                print(target_modelers[message.author].profile)
-                target_answerers[message.author].save_conversation_data(
+                print(target_modelers[target_name].profile)
+                target_answerers[target_name].save_conversation_data(
                     f"{prefix}/{str_author}/{str_author}_{datetime.now()}_{session_count[message.author]}.csv")
-                target_modelers[message.author].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
+                target_modelers[target_name].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
             else:
                 print("normal_message")
                 if "." in message.content:
                     nb_sentences = len(message.content.split("."))
-                    sentence_count[message.author] = nb_sentences
+                    sentence_count = nb_sentences
                 else:
-                    sentence_count[message.author] += 1
-                session_answerer = target_answerers[message.author]
+                    sentence_count = 1
+                print(sentence_count)
+                session_answerer = target_answerers[target_name]
                 session_answerer.update_conversation(message.content)
-                session_modeler = target_modelers[message.author]
+                session_modeler = target_modelers[target_name]
                 session_modeler = session_modeler.update_profile(message.content)
                 session_answerer.update_target_profile(session_modeler.profile)
-                session_answerer.nb_answers = sentence_count[message.author]
+                msg_count[target_name] += sentence_count
+                print(msg_count[target_name])
+                session_answerer.nb_answers = msg_count[target_name]
                 response = session_answerer.get_answer()
-                sentence_count[message.author] = 0
                 response_time = max(1.0, 0.2*len(message.content.split(" ")))
                 time.sleep(response_time)
                 await message.channel.send(response)

@@ -18,19 +18,19 @@ class ResponseStrategy:
         if self.strategy == "random":
             answer = random.choice(answer_list["text"].values)
         if self.strategy == "nearest_neighbors":
-            print(target_profile)
+            # print(target_profile)
             distances, indices = nn_model.kneighbors([list(target_profile.values())])
             ref_answer = indices[0][0]
-            print(ref_answer, indices)
+            # print(ref_answer, indices)
             answer = answer_list.iloc[ref_answer]['text']
         if self.strategy == "depth_analysis":
             answer_list = pd.read_csv("templates/depth_answers.csv")
-            print("depth_analysis")
+            # print("depth_analysis")
             depth_meter = math.floor((nb_answers-1)/3)
-            print(nb_answers, depth_meter)
+            # print(nb_answers, depth_meter)
             if depth_meter <= max(answer_list["depth"]):
                 answers = answer_list.loc[answer_list["depth"]==depth_meter]["text"]
-                print(answers)
+                # print(answers)
                 answer = random.choice(answers.values)
                 if len(answers) > len(self.previously_selected):
                     if answer in self.previously_selected:

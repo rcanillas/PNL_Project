@@ -163,3 +163,9 @@ Ce qui est important c'est l'addition **ou** la contradiction qui sont intéress
 Le message qui explique le problème / métaprogrammes / contradiction.
 Isoler les "décrochages" => Incongruences
 Passe présent / futur / passé
+
+## Discussion 30/09
+TODO:
+- Finaliser l'histoire de la longueur des messages
+- Reprendre le message d'intro du bot pour qu'il soit plus complet
+- ~~Ajouter des phrases de méta-programme à la base de donnée~~
