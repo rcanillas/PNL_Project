@@ -92,11 +92,11 @@ async def on_message(message):
                 target_modelers[target_name].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
             else:
                 print("normal_message")
-                print(sentence_buffer[target_name])
                 session_answerer = target_answerers[target_name]
                 session_modeler = target_modelers[target_name]
-                if (" ." in message.content) or (" !" in message.content) or (" ?" in message.content):
-                    sentence_list = [msg for msg in re.split('(?<=[.!?])+', message.content)]
+                if ("." in message.content) or ("!" in message.content) or ("?" in message.content):
+                    sentence_list = [msg.strip() for msg in re.split('[.!?]+', message.content)]
+                    print(sentence_list)
                     if sentence_buffer[target_name] != "":
                         current_sentence = sentence_buffer[target_name] + ' ' + sentence_list[0]
                     else:
