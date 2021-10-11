@@ -60,6 +60,12 @@ async def on_message(message):
                     target_modelers[target_name].load_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
                 time.sleep(1)
                 await message.channel.send(f"Bonjour {target_name} !")
+                time.sleep(.7)
+                await message.channel.send(f"Je suis {bot_name}, le robot qui écoute les problèmes ! Mon rôle est de déchiffrer tes 'méta-programmes' afin d'identifier les meilleurs vecteurs d'amélioration selon ta personnalité.")
+                time.sleep(1)
+                await message.channel.send("Ainsi, j'aimerais que tu me parles d'un élément de ta vie que tu souhaiterais améliorer afin que l'on puisse ensemble l'analyser en profondeur. Cela peut être lié aux hobbies, au travail, aux relations ...")
+                time.sleep(1.5)
+                await message.channel.send("Note: je ne réponds que lorsque que ton message sera terminé par un point.")
                 session_count[target_name] += 1
                 session_answerer = Answerer(session_count)
                 session_answerer.load_answer_list("templates/meta_answers.csv")

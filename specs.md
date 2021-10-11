@@ -169,3 +169,8 @@ TODO:
 - Finaliser l'histoire de la longueur des messages
 - Reprendre le message d'intro du bot pour qu'il soit plus complet
 - ~~Ajouter des phrases de méta-programme à la base de donnée~~
+
+## Session 11/10
+Potential stuff to do ? 
+- implement target name hash for anonymisation
+- implement "!" and "?" in phrase splitting.
