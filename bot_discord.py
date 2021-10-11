@@ -1,6 +1,7 @@
 import os
 import discord
 import time
+import re
 from datetime import datetime
 from dotenv import load_dotenv
 from answerer import Answerer
@@ -94,8 +95,8 @@ async def on_message(message):
                 print(sentence_buffer[target_name])
                 session_answerer = target_answerers[target_name]
                 session_modeler = target_modelers[target_name]
-                if "." in message.content:
-                    sentence_list = [msg for msg in message.content.split(".")]
+                if (" ." in message.content) or (" !" in message.content) or (" ?" in message.content):
+                    sentence_list = [msg for msg in re.split('(?<=[.!?])+', message.content)]
                     if sentence_buffer[target_name] != "":
                         current_sentence = sentence_buffer[target_name] + ' ' + sentence_list[0]
                     else:
