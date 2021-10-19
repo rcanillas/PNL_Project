@@ -19,7 +19,6 @@ target_answerers = {}
 target_modelers = {}
 sentence_buffer = {}
 
-
 @client.event
 async def on_ready():
     guild = None
