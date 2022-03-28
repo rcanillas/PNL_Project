@@ -2,41 +2,54 @@ import pandas as pd
 import random
 from sklearn.neighbors import NearestNeighbors
 import math
+from collections import defaultdict
 
-answer_list = pd.read_csv("templates/meta_answers.csv")
-answ_corpus = answer_list.drop(["text"], axis=1)
+answ_list = pd.read_csv("templates/meta_answers.csv")
+answ_corpus = answ_list.drop(["text"], axis=1)
 nn_model = NearestNeighbors(n_neighbors=1, algorithm='brute').fit(answ_corpus)
+color_map = {"actif_passif": "#fb3640",
+             "aller-vers_éviter-de": "#320e3b",
+             "global_specific": "#7f96ff",
+             "ref_externe_interne": "#a6cfd5",
+             "similitude_difference": "#dbfcff"}
 
 
 class ResponseStrategy:
     def __init__(self, strategy="random"):
         self.strategy = strategy
-        self.previously_selected = []
+        self.previously_selected = defaultdict(list)
 
-    def select_answer(self, answer_list, target_profile, nb_answers=0):
+    def select_depth_answer(self, answer_list, depth_meter, target_profile):
+        if depth_meter <= max(answer_list["depth"]):
+            answers = answer_list.loc[answer_list["depth"] == depth_meter]["text"]
+            # print(answers)
+            answer = random.choice(answers.values)
+            if answer not in self.previously_selected:
+                self.previously_selected[depth_meter].append(answer)
+            else:
+                if len(self.previously_selected[depth_meter]) < len(answer_list):
+                    answer = self.select_depth_answer(answer_list, depth_meter, target_profile)
+                else:
+                    answer = self.select_depth_answer(answer_list, depth_meter+1, target_profile)
+        else:
+            answer = "Je pense que nous avons fait le tour de la question ! Voici votre profil\n" + f"{target_profile}"
+        return answer
+
+    def select_answer(self, target_profile, nb_answers=0):
         answer = ""
-        if self.strategy == "random":
-            answer = random.choice(answer_list["text"].values)
         if self.strategy == "nearest_neighbors":
-            # print(target_profile)
+            answer_list = pd.read_csv("templates/meta_answers.csv")
+            print(list(target_profile.values()))
             distances, indices = nn_model.kneighbors([list(target_profile.values())])
             ref_answer = indices[0][0]
-            # print(ref_answer, indices)
+            print(ref_answer, indices)
             answer = answer_list.iloc[ref_answer]['text']
+            print(answer)
         if self.strategy == "depth_analysis":
             answer_list = pd.read_csv("templates/depth_answers.csv")
-            # print("depth_analysis")
             depth_meter = math.floor((nb_answers-1)/3)
-            # print(nb_answers, depth_meter)
-            if depth_meter <= max(answer_list["depth"]):
-                answers = answer_list.loc[answer_list["depth"]==depth_meter]["text"]
-                # print(answers)
-                answer = random.choice(answers.values)
-                if len(answers) > len(self.previously_selected):
-                    if answer in self.previously_selected:
-                        answer = random.choice(answers.values)
-            else:
-                answer = "Je pense que nous avons fait le tour de la question ! Voici votre profil\n" +f"{target_profile}"
+            answer = self.select_depth_answer(answer_list, depth_meter, target_profile)
+
         return answer
 
 
@@ -51,7 +64,7 @@ class Answerer:
 
     def load_conversation_data(self, conv_data_path):
         self.conversation_data = pd.read_csv(conv_data_path)
-        model_data = self.conversation_data.drop('text', axis=1)
+        # model_data = self.conversation_data.drop('text', axis=1)
         return self
 
     def save_conversation_data(self, conv_data_path):
@@ -63,9 +76,22 @@ class Answerer:
         # TODO: check if "text" in columns here
         return self
 
-    def update_conversation(self, message):
+    @staticmethod
+    def _select_color(sentence_profile):
+        color = "#FFFFFF"
+        max_value = 0
+        for key in sentence_profile.keys():
+            if abs(sentence_profile[key]) > 0:
+                if abs(sentence_profile[key]) > max_value:
+                    color = color_map[key]
+                    max_value = abs(sentence_profile[key])
+        return color
+
+    def update_conversation(self, message, sentence_profile):
         sentences = message.split(".")
-        self.conversation_data = self.conversation_data.append([{"message": s} for s in sentences], ignore_index=True)
+        color = self._select_color(sentence_profile)
+        self.conversation_data = self.conversation_data.append([{"message": s, "type": "answer", "color": color}
+                                                                for s in sentences], ignore_index=True)
         # self.nb_answers += 1
         return self
 
@@ -80,9 +106,11 @@ class Answerer:
         return self
 
     def get_answer(self):
-        answer = self.response_strategy.select_answer(self.answer_list,
-                                                      self.target_profile,
+        answer = self.response_strategy.select_answer(self.target_profile,
                                                       self.nb_answers)
+        self.conversation_data = self.conversation_data.append([{"message": answer,
+                                                                 "type": "question",
+                                                                 "color": "#808080"}])
         return answer
 
 

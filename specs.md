@@ -174,3 +174,63 @@ TODO:
 Potential stuff to do ? 
 - implement target name hash for anonymisation -> Pas besoin car pseudo déjà anonymisé
 - ~~implement "!" and "?" in phrase splitting.~~
+
+## Session 19/10 
+- Implémenter le "string id" pour pouvoir changer les phrases facilement ? Prio 5
+- Implémenter le testeur - prio 2
+- Implémenter fasttext - prio 3
+- ~~Implémenter la détection de 'variation' - prio 1~~
+
+Nice to have: envoyer des liens vers les références de la PNL. prio 5
+
+## Session 27/11 
+Phrases déclencheurs qui vont indiquer à quel niveau de la pyramide des niveaux logiques
+ex "je me suis dit" -> Stratégie, "j'ai fait " -> Comportement
+Méta-programmes = stratégies. Situation désagréable = stratégies "défaillantes" ?
+1ère session: explorer les comportements, déterminer les stratégies, identifier une ou deux croyances. 
+2ème session: confirmer les croyances + travailler sur l'identité + proposer une autre perspective
+3ème session + : protocole. 
+
+Projet de vie: objectif sur 5 ans
+
+Pourquoi ? -> C'est croyance/valeur.
+Vision (au service de quoi ? appartenance) -> identité/mission (ce que tu es, comment tu contribues) -> croyances/valeurs (pourquoi ?) -> émotion (quel effet) -> capacités/stratégies (comment, ce que tu peux faire) -> comportement (quoi, ce que tu fais) -> environnement (ou, avec qui, combien, quand, ce que tu as)
+**Objectif** et **obstacles**
+Méta-programmes sont importants pour déterminer l'objectif de la personne : si les capacités/stratégies ne sont pas bonnes, c'est que l'objectif n'est pas clair, soit qu'il n'y a pas d'objectif.
+L'objectif est clarifié quand les méta-programmes (stratégies) sont identifiées. 
+Les problèmes les plus importants sont ceux les plus "proches" (+ intimes)
+
+Vidéo de présentation du bot / de ce qu'on a fait jusqu'à maintenant + des lives pour du financement participatif.
+Objectif du bot : déterminer le noyau du problème et le présenter de façon constructive / correcte. Présente les résultats à un humain 'interface' plutot qu'à l'interlocuteur direct.
+Un coach lit les "résultats", les interpètes et fait la médiation.
+
+## Session 29/12
+Axel -> a écrit quelques questions ! Soit qui questionne sur le méta-programme / soit qui creuse les niveaux logiques.
+~~Actif: Qu'est-ce que le fait d'être aussi actif dans cette situation vous apporte ?~~
+~~Passif: Comment réagissez-vous à cette situation ?~~
+~~Passif / Emotion: Quel effet à cette situation sur vous ?~~
+~~Référence externe: Comment savez-vous ce que la personne pense / la personne veut ?~~ 
+Référence externe: Qu'est-ce qui vous fait penser que [insérer phrase réf externe] ? 
+Référence interne: 
+Niveau logique : Quelle est votre intention alors que vous [insérer phrase considérée comme active ici] ?
+Niveau logique: Que ressentez-vous lorsque vous [verbe de la personne + fin de la phrase]
+~~Question milieu / fin (Identité): Quel est votre rôle dans cette situation ?~~
+
+Potentiel lien: colorer les 'parties de phrases' qui correspondent à certains méta-programme pour faire listing "visuel"
+
+Note: 
+ref externe: la personne se soumet trop aux besoins des autres - pense à la place des autres, impression qu'elle donne tout et n'a pas le mérite / ce qu'elle veut en retour.
+ref interne: la personne porte  le monde sur les épaules / ne fais pas confiance aux gens. -> Difficile de trouver des questions.
+TODO-List:
+- ~~Intégrer les nouvelles informations  https://lite.framacalc.org/9q0g-metasignature_1~~
+- ~~Récupérer les scores meta-programme des phrases~~
+- Mettre en place "modèle grammatical" de phrases pour extraire "parties" à reformuler
+- ~~Associer une couleur~~
+- Mettre en place trigger des questions
+
+Session travail 28/01 
+Palette couleur : #fb3640, #320e3b, #7f96ff, #a6cfd5, #dbfcff, #157f1f
+{"Red Salsa":"fb3640","Russian Violet":"320e3b","Cornflower Blue":"7f96ff","Light Blue":"a6cfd5","Light Cyan":"dbfcff","Ao English":"157f1f"}
+
+NOTE
+Que se passe-t-il s'il y a un point qui n'est pas une fin de phrase ? ""
