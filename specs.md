@@ -228,9 +228,17 @@ TODO-List:
 - ~~Associer une couleur~~
 - Mettre en place trigger des questions
 
-Session travail 28/01 
+##Session travail 28/01 
 Palette couleur : #fb3640, #320e3b, #7f96ff, #a6cfd5, #dbfcff, #157f1f
 {"Red Salsa":"fb3640","Russian Violet":"320e3b","Cornflower Blue":"7f96ff","Light Blue":"a6cfd5","Light Cyan":"dbfcff","Ao English":"157f1f"}
 
 NOTE
 Que se passe-t-il s'il y a un point qui n'est pas une fin de phrase ? ""
+
+
+##Session travail 28/03
+Objectif -> préparer une démo du bot.
+pas d'avancées
+
+##Session travail 30/03
+But -> restitution visuelle des métaprogammes.

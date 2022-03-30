@@ -1,6 +1,8 @@
 import pandas as pd
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 class PdfExporter:
@@ -23,6 +25,22 @@ class PdfExporter:
             y = y - self.size * 1.2
         self.canvas.showPage()
         self.canvas.save()
+
+    def generate_report_image(self, profile):
+        profile_pd = pd.DataFrame()
+        for key, value in profile.items():
+            key_dict = {"metaprogam": key, "value":value}
+            profile_pd = profile_pd.append([key_dict])
+        print(profile_pd)
+        fig = plt.figure(figsize=(20, 10))
+        ax1 = sns.barplot(data=profile_pd, x="metaprogam", y="value")
+        plt.axhline(0, linestyle=":", color="grey")
+        user_name = self.user_id.split("_")[0]
+        fig_path = f"user_data/{user_name}/metaprogram_report_{self.user_id}.png"
+        plt.savefig(fig_path, bbox_inches="tight")
+        plt.show()
+        plt.close()
+        return fig_path
 
 
 if __name__ == '__main__':

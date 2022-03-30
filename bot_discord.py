@@ -23,6 +23,7 @@ target_modelers = {}
 sentence_buffer = {}
 profile_buffer = {}
 
+
 @client.event
 async def on_ready():
     guild = None
@@ -111,6 +112,7 @@ async def on_message(message):
                     f"{prefix}/{str_author}/{str_author}_{datetime.now()}_{session_count[target_name]}.csv")
                 target_modelers[target_name].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
                 exporter = PdfExporter(f"{str_author}_{datetime.now()}")
+                exporter.generate_report_image(target_modelers[target_name].profile)
                 exporter.write_report(target_answerers[target_name].conversation_data)
             else:
                 print("normal_message")
