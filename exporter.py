@@ -1,30 +1,35 @@
 import pandas as pd
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
 import matplotlib.pyplot as plt
 import seaborn as sns
+from math import floor
 
+from fpdf import FPDF
 
 class PdfExporter:
 
-    def __init__(self, user_id, size=10):
+    def __init__(self, user_id, size=12):
         self.user_id = user_id
-        self.canvas = canvas.Canvas(f"{user_id}.pdf")
+        self.user_name = self.user_id.split("_")[0]
+        self.canvas = FPDF()
+        # self.canvas = canvas.Canvas(f"user_data/{self.user_name}/conversation_report_{self.user_id}.pdf")
         self.size = size
-        self.canvas.setFont("Courier", self.size)
+        self.canvas.set_font("Courier", "", size=self.size)
+        self.report_img = None
 
     def write_report(self, report_df):
-        x = 1.3 * inch
-        y = 11 * inch
+        self.canvas.add_page()
+        self.canvas.cell(60, 10, 'Rapport MetaSignature', 0, 1, 'C')
+        if self.report_img is not None:
+            self.canvas.image(self.report_img, w=floor(self.canvas.w - (self.canvas.w * 0.1)))
+        self.canvas.add_page()
+        y = 10
         for message in report_df.to_dict(orient="records"):
             text = message["message"] + "."
             suffix = "Q: " if message["type"] == "question" else "A: "
             color = message["color"]
-            self.canvas.setFillColor(color)
-            self.canvas.drawString(x, y, suffix+text)
-            y = y - self.size * 1.2
-        self.canvas.showPage()
-        self.canvas.save()
+            self.canvas.cell(self.canvas.w, y, suffix+text)
+            self.canvas.ln()
+        self.canvas.output(f"user_data/{self.user_name}/conversation_report_{self.user_id}.pdf", 'F')
 
     def generate_report_image(self, profile):
         profile_pd = pd.DataFrame()
@@ -35,11 +40,13 @@ class PdfExporter:
         fig = plt.figure(figsize=(20, 10))
         ax1 = sns.barplot(data=profile_pd, x="metaprogam", y="value")
         plt.axhline(0, linestyle=":", color="grey")
-        user_name = self.user_id.split("_")[0]
-        fig_path = f"user_data/{user_name}/metaprogram_report_{self.user_id}.png"
+
+        fig_path = f"user_data/{self.user_name}/metaprogram_report_{self.user_id}.png"
+        plt.title(f"{self.user_name} MetaPrograms Overview")
         plt.savefig(fig_path, bbox_inches="tight")
         plt.show()
         plt.close()
+        self.report_img = fig_path
         return fig_path
 
 

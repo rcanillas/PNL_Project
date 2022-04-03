@@ -140,7 +140,7 @@ async def on_message(message):
                                                                                      "nearest_neighbors"])
                         print(session_answerer.response_strategy.strategy)
                         response = session_answerer.get_answer()
-                        response_time = max(1.0, 0.2 * len(message.content.split(" ")))
+                        response_time = min(2.0, 0.2 * len(message.content.split(" ")))
                         time.sleep(response_time)
                         await message.channel.send(response)
                     else:

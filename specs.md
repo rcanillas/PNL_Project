@@ -242,3 +242,5 @@ pas d'avancées
 
 ##Session travail 30/03
 But -> restitution visuelle des métaprogammes.
+Mis en place première version.
+Idée: évolution "message par message" du reporting.
