@@ -7,11 +7,6 @@ from collections import defaultdict
 answ_list = pd.read_csv("templates/meta_answers.csv")
 answ_corpus = answ_list.drop(["text"], axis=1)
 nn_model = NearestNeighbors(n_neighbors=1, algorithm='brute').fit(answ_corpus)
-color_map = {"actif_passif": "#fb3640",
-             "aller-vers_éviter-de": "#320e3b",
-             "global_specific": "#7f96ff",
-             "ref_externe_interne": "#a6cfd5",
-             "similitude_difference": "#dbfcff"}
 
 
 class ResponseStrategy:
@@ -77,20 +72,31 @@ class Answerer:
         return self
 
     @staticmethod
-    def _select_color(sentence_profile):
-        color = "#FFFFFF"
+    def _select_metaprogram(sentence_profile):
+        metaprogram = None
         max_value = 0
         for key in sentence_profile.keys():
-            if abs(sentence_profile[key]) > 0:
-                if abs(sentence_profile[key]) > max_value:
-                    color = color_map[key]
-                    max_value = abs(sentence_profile[key])
-        return color
+            metaprogram_score = sentence_profile[key]
+            if abs(metaprogram_score) > 0:
+                if abs(metaprogram_score) > max_value:
+                    metaprogram_key = key.split("_")
+                    if key != "ref_externe_interne":
+                        metaprogram_neg = metaprogram_key[0]
+                        metaprogram_pos = metaprogram_key[1]
+                    else:
+                        metaprogram_neg = metaprogram_key[1]
+                        metaprogram_pos = metaprogram_key[2]
+                    if metaprogram_score < 0:
+                        metaprogram = metaprogram_neg
+                    else:
+                        metaprogram = metaprogram_pos
+                    max_value = metaprogram_score
+        return metaprogram, max_value
 
     def update_conversation(self, message, sentence_profile):
         sentences = message.split(".")
-        color = self._select_color(sentence_profile)
-        self.conversation_data = self.conversation_data.append([{"message": s, "type": "answer", "color": color}
+        metaprogram, metaprogram_score = self._select_metaprogram(sentence_profile)
+        self.conversation_data = self.conversation_data.append([{"message": s, "type": "answer", "metaprogram": metaprogram, "metaprogram_score":metaprogram_score}
                                                                 for s in sentences], ignore_index=True)
         # self.nb_answers += 1
         return self
@@ -110,7 +116,7 @@ class Answerer:
                                                       self.nb_answers)
         self.conversation_data = self.conversation_data.append([{"message": answer,
                                                                  "type": "question",
-                                                                 "color": "#808080"}])
+                                                                 "metaprogram": None}])
         return answer
 
 

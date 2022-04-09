@@ -244,3 +244,23 @@ pas d'avancées
 But -> restitution visuelle des métaprogammes.
 Mis en place première version.
 Idée: évolution "message par message" du reporting.
+
+## Discussion 04/04
+Discussion bot avec Axel -> "on va faire de la thune"
+Rework des couleurs -> utiliser https://color.adobe.com/create/color-wheel
+Utiliser double split complimentary pour 5 couleurs 
+Puis complémentaire. 
+Faire un business plan :D 
+TODO list: 
+- remettre les couleurs
+- préparer des questions pour "mode scénario"
+
+## Session travail 08/04
+Travaillé sur les couleurs -> séparé les métaprogams pour + d'info sur métaprogramme "spécifique" de la phrase plutot que le couple
+Rework les scores des phrases pour caller à la clé (ex: aller-vers_éviter-de, aller-vers a score "négatif" et éviter-de score "positif")
+Mis une légende dans le pdf. 
+TODO: 
+- Questions pour la démo (scénario ?)
+- Refonte pdf pour faire plus "beau"
+Problèmes constatés: 
+- Si phrase trop longue, possiblement dépassement de la taille de page sur pdf.
