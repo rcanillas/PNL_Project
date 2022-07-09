@@ -17,7 +17,7 @@ Finalement -> j'ai besoin de signes de reconnaissances !
 Assistant de poche qui pose les bonnes questions.
 Réactivité
 
-25 méta-programmes. 2 choses qui s'opposent
+26 méta-programmes. 2 choses qui s'opposent
 Actif / Passif
 Global / Détail
 Tri sur soi / Tri sur l'autre
@@ -264,3 +264,153 @@ TODO:
 - Refonte pdf pour faire plus "beau"
 Problèmes constatés: 
 - Si phrase trop longue, possiblement dépassement de la taille de page sur pdf.
+
+## Discussion 19/04
+- Mettre le profil après le "merci metasignature"
+- Reprendre le scénario  de démo
+- Axel crée des questions liées au profil, pour reprendre la partie "questions metaprograms"
+- Bot demande présentation générale, + questions générales, puis guider vers plus de précision.
+- Réfléchir à organisation pour User research
+
+## Session travail 26/04
+Elaboration du scénario ! 
+Déroulé retrouvé depuis la RemarKkble:
+1. Message d'accueil du bot (1 min)
+2. Conversation avec le bot (5 min)
+   1. Phrase 1 orientée 'actif'
+   2. Question 1 du bot
+   3. Phrase 2 orientée 'actif'
+   4. Question 2 du bot 
+   5. Phrase 3 orientée 'passif'
+   6. Question 3 du bot 
+   7. Phrase 4 orientée 'actif"
+   8. Question 4 du bot
+   9. Phrase de fin
+3. Analyse du résultat
+
+PHRASES DEMO: 
+Phrase 1: "Mon manager m'a demandé faire une tâche que je trouvais ingrate, mais parfois il faut s'y mettre."
+Phrase 2: "J'ai décidé de foncer pour finir le plus rapidement possible."
+Phrase 3: "J'ai malgré tout soigneusement vérifié les détails."
+Phrase 4: "Mais mon manager m'a dit "plus vite que ça" et j'ai été très déstabilisé."
+TODO:
+- Ecrire 3 phrases actives et une phrase passive 
+- Mettre en place alerting sur incohérence
+
+## Discussion 26/04
+-> Améliorations possibles :
+- Analyse grammaticale pour reprendre des morceaux de phrases
+- Un modèle par métaprogramme au lieu d'un seul modèle "global" pour permettre a une phrase d'avoir "plusieurs" métaprogrammes
+
+## Session travail 05/05
+Réparé problème avec inversion -> pour le moment, réagit seulement à phrase précédente.
+
+Dissocier l'expérience entreprise vs expérience grand public 
+Bot en entreprise -> Moins de question de forme (prise de connaissance)
+Présentation "une seule fois" pour un employé. 
+Phase d'onboarding -> Pas forcément importante, le + important est le problème posé. 
+
+Présentation permet de donner des indices pour un coach.
+
+Entreprise propose un 'cadre', différent de l'aspect grand public (le bot doit mettre à l'aise avant d'attaquer le problème)
+Point de vue "analyse + prescription" -> pas forcément adapté car but du coaching est de mettre les choses à plat / au clair. Une fois que les choses sont posées, c'est aux gens de faire "ce qu'il faut"
+-> Peu d'induction, peu de prescription. Les "gens" résolvent eux-même leur problème.
+
+Coach intervient pour former les managers. 
+Bot permet aux managers d'avoir "vision" des personnalités de l'équipe -> levier de résolution des conflits
+Coach "revient" dans l'algorithme quand personnes "refusent" le bot. 
+
+Bot remplace "questionnaire de personnalité" -> comme si coach passait 1h au téléphone.
+(marché moins intéressant).
+
+Bot -> outil de résolution de conflit pour les managers.
+
+Analyse PHRASES DEMO by Axel: 
+Phrase 1: "Mon manager m'a demandé faire une tâche que je trouvais ingrate, mais parfois il faut s'y mettre."
+-> Mismatch + aller vers 
+Phrase 2: "J'ai décidé de foncer pour finir le plus rapidement possible."
+-> actif + aller vers
+Phrase 3: "J'ai malgré tout soigneusement vérifié les détails."
+-> détail (rien à voir avec le reste) + aller vers (un peu)
+Phrase 4: "Mais mon manager m'a dit "plus vite que ça" et j'ai été très déstabilisé."
+-> réactif + éviter de (inversion est ici)
+
+Dynamique des meta-programmes est importante: mismatch + éviter de -> personne est contrainte de faire quelquechose
+Mismatch -> indication d'une situation problématique - personne pas dans ses valeurs. 
+Indication importante mais pas forcément questionner tous les mismatchs -> critères ?
+
+Note: actif/passif différent de réactif/proactif
+Missing metaprograms: réactif/proactif - match/mismatch
+
+Méthodologie du changement en PNL -> le fond. 
+- Recueillir des informations précises (état présent, état désiré) -> travail du bot
+- Mettre en forme état désiré conforme aux 5 critères d'un objectif bien formulé -> pas utile dans l'entreprise
+- Résumé / reformulation + rester sur le sujet -> manager 
+- Technique appropriée ("soin") -> pas intéressant dans cadre de l'enteprise
+- Testez le résultat -> en lien avec technique, pas dans notre cadre
+- Installer changement dans point vers le futur (-> job du manager)
+
+Etat présent vs état désiré -> bot faire le point sur l'état présent 'uniquement'.
+
+-> Question du bot dans exemple était "pertinente" selon Axel.
+
+Idée pour étude de metaprogramme en "parallèle" -> Plutot que l'utilisation de NNeighbor, essayer isolation forest pour
+analyse "distance" entre phrase et métaprogramme.
+-> Plutot que + ou -, chaque "pôle" des paires devient son propre arbre ?
+Classification "binaire" entre chaque pole > modèle devient probabilité de yes ?  
+
+TODO: 
+- ~~Mettre en place analyse en parallèle de tous les metaprogramme au lieu d'un seul 'dominant'~~
+- mise en page rapport
+- faire coller démo aux résultats 
+
+## Session travail 12/05
+
+Mise en place des tâches à effectuer. 
+1. Prendre en compte 'multiplicité' 
+
+
+## Session travail 26/05
+Commencé à travailler sur business plan
+-> Voir dossier "MetaSignature BP"
+Discussion avec Amy (manager d'une boîte tech) pour identification du besoin :) 
+
+## Session travail 27/05
+TODO List : 
+- Présenter discussion avec Amy + avancées sur business plan
+- Mettre en place un dropbox 
+
+
+## Session travail 02/06
+Pour afficher les métaprogrammes d'une phrase -> pastilles de couleur au début (à la fin ?) des phrases. 
+Préparation d'une todo-list. 
+Axel a programme qui fluctue -> on se fait un point le dimanche pour caler une réunion dans la semaine. 
+Barbecues ! Axel m'emmène ! 
+
+Stratégie pour étude de marché:
+- La cause des problèmes de management, plutot technique ou communicationnel 
+- Décrire un exemple 
+- Demander quelles sont les options disponibles pour analyser et résoudre la situation
+- Demander si un outil d'analyse de personnalité serait pertinent 
+- Décrire notre produit et demander combien les personnes seraient prêtes à payer.
+
+-> Utilisation de l'outil pour la RH: "fantasme" car les gens ne sont pas honnête pour les entretiens. + difficile qu'un test de personnalité. 
+A terme, utilisation possible du bot ?
++ Chance que ça précipite certain problèmes
+
+-> Fiche de synthèse pour le coach - préparation de l'intervention.
+
+Focus commercial -> Comment notre bot va faire gagner de l'argent pour l'entreprise 
+-> Si les coachs sont dans la boite on a déjà a moitié gagné
+-> Les potentiels freins: 
+- Si les gens adhèrent ("Personne ne va parler à une intelligence artificielle").
+- Si l'analyse est solide ("C'est un peu l'horoscope votre truc").
+- Si ça leur fait vraiment gagner de l'argent.
+
+Proposer un calendrier prévisonnel. 
+
+## Session discussion 13/06
+Coaching par snapchat -> Analyse ok mais pas forcément très agréable pour elle. Mais toujours avec son mec -> peut-être un peu fonctionné 
+Mais pas trop de reconnaissance forcément. 
+Les gens doivent se rendre compte par eux-même, on ne peut pas tout leur donner. 
+Devoir pour le 17/06 -> 

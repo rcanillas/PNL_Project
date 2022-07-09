@@ -93,10 +93,10 @@ class Answerer:
                     max_value = metaprogram_score
         return metaprogram, max_value
 
-    def update_conversation(self, message, sentence_profile):
+    def update_conversation(self, message, sentence_profile, inversion):
         sentences = message.split(".")
         metaprogram, metaprogram_score = self._select_metaprogram(sentence_profile)
-        self.conversation_data = self.conversation_data.append([{"message": s, "type": "answer", "metaprogram": metaprogram, "metaprogram_score":metaprogram_score}
+        self.conversation_data = self.conversation_data.append([{"message": s, "type": "answer", "metaprogram": metaprogram, "metaprogram_score": metaprogram_score, "inversion": inversion}
                                                                 for s in sentences], ignore_index=True)
         # self.nb_answers += 1
         return self
