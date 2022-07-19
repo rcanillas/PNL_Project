@@ -414,3 +414,23 @@ Coaching par snapchat -> Analyse ok mais pas forcément très agréable pour ell
 Mais pas trop de reconnaissance forcément. 
 Les gens doivent se rendre compte par eux-même, on ne peut pas tout leur donner. 
 Devoir pour le 17/06 -> 
+
+
+## Session discussion 16/07
+Questions pour poser le cadre : 
+- Quelle est la nature de la situation ? 
+- Quelle est votre responsabilité dans la situation ? 
+
+Demander une formulation spécifique des réponses ? Mot-clé qui indique au bot le sujet / le thème abordé.
+Quelqu'un qui saura "décrypter" les différents mots-clés pourra gagner du temps.
+
+Pas possible de "fermer les yeux" -> renégociation du contrat. 
+"Chaine" de méta-programmes, profil récurrent qui émergent à chaque situation.
+Chapitrage: 
+"Description: "
+"Implication: "
+Groupes de questions "élégants"
+L'interlocuteur est "libre" de ranger les choses comme elle le veut. 
+Pour ranger -> utiliser des mots clés 
+Questions pour cadrer.
+Question pour explorer la pyramide. 

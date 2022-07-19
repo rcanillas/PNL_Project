@@ -22,6 +22,13 @@ color_map = {"actif": metaprogram_palette[0],
              "mismatch": metaprogram_palette[11],
              None: [0, 0, 0]}
 
+color_map_columns = {"actif_passif": metaprogram_palette[0],
+                     "aller-vers_éviter-de": metaprogram_palette[2],
+                     "global_détail": metaprogram_palette[4],
+                     "ref_externe_interne": metaprogram_palette[6],
+                     "similitude_difference": metaprogram_palette[8],
+                     "match_mismatch": metaprogram_palette[10]}
+
 
 class PdfExporter:
 
@@ -29,7 +36,6 @@ class PdfExporter:
         self.user_id = user_id
         self.user_name = self.user_id.split("_")[0]
         self.canvas = FPDF()
-        # self.canvas = canvas.Canvas(f"user_data/{self.user_name}/conversation_report_{self.user_id}.pdf")
         self.size = size
         self.canvas.set_font("Courier", "", size=self.size)
         self.report_img = None
@@ -72,7 +78,12 @@ class PdfExporter:
             profile_pd = profile_pd.append([key_dict])
         print(profile_pd)
         plt.figure(figsize=(20, 10))
-        sns.barplot(data=profile_pd, x="metaprogam", y="value", palette=sns_palette)
+        ax = sns.barplot(data=profile_pd, x="metaprogam", y="value", order=color_map_columns.keys())
+        for color_id, bar in enumerate(ax.patches):
+            print(list(color_map_columns.values())[color_id])
+            bar.set_color((list(color_map_columns.values())[color_id][0]/255,
+                           list(color_map_columns.values())[color_id][1]/255,
+                           list(color_map_columns.values())[color_id][2]/255))
         plt.axhline(0, linestyle=":", color="grey")
 
         fig_path = f"user_data/{self.user_name}/metaprogram_report_{self.user_id}.png"
