@@ -1,0 +1,11 @@
+actif_passif,ref_externe_interne,similitude_difference,match_mismatch,sentence
+0,1,1,0,il a pensé
+0,1,1,0,elle s'est dit
+-1,1,1,0,Mon fils était malade
+0,-1,-1,0,j'ai pensé
+0,-1,0,0,je pense
+0,-1,0,0,j'ai l'impression
+0,-1,0,0,je
+0,1,0,0,elle
+0,1,0,0,il
+0,1,0,-1,je ne supporte pas

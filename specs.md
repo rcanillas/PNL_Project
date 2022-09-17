@@ -434,3 +434,6 @@ L'interlocuteur est "libre" de ranger les choses comme elle le veut.
 Pour ranger -> utiliser des mots clés 
 Questions pour cadrer.
 Question pour explorer la pyramide. 
+
+# Session 1 17/09 
+Prépartation pour la détection des niveaux logiques dans les phrases.

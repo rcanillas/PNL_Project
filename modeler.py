@@ -5,30 +5,53 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from sklearn.feature_extraction.text import CountVectorizer
 
-prefix = "knowledge_mp"
-model_dict = {}
-for meta_program_file in os.listdir(prefix):
-    print(meta_program_file)
-    meta_program_df = pd.read_csv(prefix+"/"+meta_program_file)
+prefix_metaprogram = "metaprogram_db"
+metaprogram_dict = {}
+for metaprogram_file in os.listdir(prefix_metaprogram):
+    print(metaprogram_file)
+    metaprogram_df = pd.read_csv(prefix_metaprogram + "/" + metaprogram_file)
     temp_metaprograms = pd.DataFrame()
-    temp_metaprograms = temp_metaprograms.append(meta_program_df, sort=True)
+    temp_metaprograms = temp_metaprograms.append(metaprogram_df, sort=True)
     temp_metaprograms = temp_metaprograms.fillna(0)
     ref_metaprograms = temp_metaprograms.groupby(by="sentence").sum().reset_index()
     ref_metaprograms.index.set_names(['sentence'])
-    #print(ref_metaprograms.info())
-    meta_programs = list(ref_metaprograms.drop("sentence", axis=1).keys())
+    # print(ref_metaprograms.info())
+    metaprograms = list(ref_metaprograms.drop("sentence", axis=1).keys())
     corpus = ref_metaprograms["sentence"].dropna()
     vectorizer = CountVectorizer()
-    #print(corpus)
+    # print(corpus)
     transf_corpus = vectorizer.fit_transform(corpus.values)
-    #print(transf_corpus.toarray())
-    #print(vectorizer.get_feature_names())
-    model_dict[meta_program_df.keys()[0]] = (vectorizer,
-                                             NearestNeighbors(n_neighbors=1, algorithm='brute').fit(transf_corpus),
-                                             ref_metaprograms)
+    # print(transf_corpus.toarray())
+    # print(vectorizer.get_feature_names())
+    metaprogram_dict[metaprogram_df.keys()[0]] = (vectorizer,
+                                                  NearestNeighbors(n_neighbors=1, algorithm='brute').fit(
+                                                      transf_corpus),
+                                                  ref_metaprograms)
 
-print(len(model_dict))
-meta_programs = model_dict.keys()
+print(len(metaprogram_dict))
+meta_programs = metaprogram_dict.keys()
+
+prefix_logiclevel = "logiclevel_db"
+logiclevel_dict = {}
+for logiclevel_file in os.listdir(prefix_logiclevel):
+    print(logiclevel_file)
+    logiclevel_df = pd.read_csv(prefix_logiclevel + "/" + logiclevel_file)
+    temp_logiclevels = pd.DataFrame()
+    temp_logiclevels = temp_logiclevels.append(logiclevel_df, sort=True)
+    temp_logiclevels = temp_logiclevels.fillna(0)
+    ref_logiclevels = temp_logiclevels.groupby(by="sentence").sum().reset_index()
+    ref_logiclevels.index.set_names(['sentence'])
+    print(ref_logiclevels.info())
+    logiclevels = list(ref_logiclevels.drop("sentence", axis=1).keys())
+    corpus = ref_logiclevels["sentence"].dropna()
+    vectorizer = CountVectorizer()
+    print(corpus)
+    transf_corpus = vectorizer.fit_transform(corpus.values)
+    # print(transf_corpus.toarray())
+    # print(vectorizer.get_feature_names())
+    logiclevel_dict[logiclevel_df.keys()[0]] = (vectorizer,
+                                                NearestNeighbors(n_neighbors=1, algorithm='brute').fit(transf_corpus),
+                                                ref_logiclevels)
 
 
 class Modeler:
@@ -36,7 +59,7 @@ class Modeler:
     def __init__(self, target):
         self.target = target
         self.profile = {program: 0 for program in meta_programs}
-        self.models = model_dict
+        self.models = metaprogram_dict
         self.ref_profile = self.profile
         self.ref_sentence = None
 
@@ -58,8 +81,8 @@ class Modeler:
                 mp_name = list(mp_profile.keys())[0]
                 mp_value = list(mp_profile.values())[0]
                 profile[mp_name] = mp_value
-                #self.ref_profile[mp_name] += mp_value
-            #print(profile)
+                # self.ref_profile[mp_name] += mp_value
+            # print(profile)
         print(profile)
         return profile
 
@@ -96,4 +119,5 @@ class Modeler:
 
 if __name__ == '__main__':
     import pytest
+
     pytest.main()
