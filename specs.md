@@ -437,3 +437,7 @@ Question pour explorer la pyramide.
 
 # Session 1 17/09 
 Prépartation pour la détection des niveaux logiques dans les phrases.
+Détection des niveaux logiques - code en place, manque références 
+Que faire avec cette information ?
+- Ajouter au rapport ? 
+- Modifier la question posée ? 

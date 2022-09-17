@@ -1,5 +1,5 @@
-logical_level,sentence
-context,fait
-context,réagi
-context,dit
-context,vu
+context,sentence
+1,fait
+1,réagi
+1,dit
+1,vu

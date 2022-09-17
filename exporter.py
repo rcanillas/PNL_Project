@@ -7,7 +7,7 @@ from fpdf import FPDF
 
 brightness = 230
 sns_palette = sns.color_palette("Paired", 12)
-metaprogram_palette = [(c[0]*brightness, c[1]*brightness, c[2]*brightness) for c in sns_palette]
+metaprogram_palette = [(c[0]*brightness/255, c[1]*brightness/255, c[2]*brightness/255) for c in sns_palette]
 color_map = {"actif": metaprogram_palette[0],
              "passif": metaprogram_palette[1],
              "aller-vers": metaprogram_palette[2],
@@ -19,8 +19,7 @@ color_map = {"actif": metaprogram_palette[0],
              "similitude": metaprogram_palette[8],
              "difference": metaprogram_palette[9],
              "match": metaprogram_palette[10],
-             "mismatch": metaprogram_palette[11],
-             None: [0, 0, 0]}
+             "mismatch": metaprogram_palette[11]}
 
 color_map_columns = {"actif_passif": metaprogram_palette[0],
                      "aller-vers_éviter-de": metaprogram_palette[2],
@@ -64,8 +63,8 @@ class PdfExporter:
                     suffix = "A-!: "
                 else:
                     suffix = "A: "
-            color = color_map[message["metaprogram"]]
-
+            #color = color_map[message["metaprogram"]]
+            color = [0, 0, 0]
             self.canvas.set_text_color(r=color[0], g=color[1], b=color[2])
             self.canvas.multi_cell(self.canvas.w - 2*self.canvas.l_margin, y, suffix+text)
             self.canvas.ln()
@@ -74,18 +73,13 @@ class PdfExporter:
     def generate_report_image(self, profile):
         profile_pd = pd.DataFrame()
         for key, value in profile.items():
-            key_dict = {"metaprogam": key, "value": value}
+            key_dict = {"metaprogram": key, "value": value}
             profile_pd = profile_pd.append([key_dict])
         print(profile_pd)
         plt.figure(figsize=(20, 10))
-        ax = sns.barplot(data=profile_pd, x="metaprogam", y="value", order=color_map_columns.keys())
-        for color_id, bar in enumerate(ax.patches):
-            print(list(color_map_columns.values())[color_id])
-            bar.set_color((list(color_map_columns.values())[color_id][0]/255,
-                           list(color_map_columns.values())[color_id][1]/255,
-                           list(color_map_columns.values())[color_id][2]/255))
-        plt.axhline(0, linestyle=":", color="grey")
-
+        ax = sns.barplot(data=profile_pd, x="value", y="metaprogram",
+                         order=color_map_columns.keys(), palette=color_map_columns)
+        plt.axvline(0, linestyle=":", color="grey")
         fig_path = f"user_data/{self.user_name}/metaprogram_report_{self.user_id}.png"
         plt.title(f"{self.user_name} MetaPrograms Overview")
         plt.savefig(fig_path, bbox_inches="tight")
@@ -100,15 +94,14 @@ class PdfExporter:
         mp_count = defaultdict(int)
         for msg_id, msg_info in enumerate(answ_df.to_dict(orient="records")):
             print(msg_info)
-            mp_count[msg_info["metaprogram"]] += msg_info["metaprogram_score"]
-            flow_dict = {"msg_id": msg_id,
-                         "metaprogam": msg_info["metaprogram"],
-                         "score": mp_count[msg_info["metaprogram"]]}
-            flow_df = flow_df.append([flow_dict]).reset_index(drop=True)
+            for metaprogram in color_map.keys():
+                mp_count[metaprogram] += msg_info[metaprogram]
+                flow_dict = {"msg_id": msg_id,"metaprogam": metaprogram, "score": mp_count[metaprogram]}
+                flow_df = flow_df.append([flow_dict]).reset_index(drop=True)
         print(flow_df)
         plt.figure(figsize=(20, 10))
         sns.lineplot(data=flow_df, x="msg_id", y="score", hue="metaprogam",
-                     linestyle=":", marker="o")
+                     linestyle=":", marker="o", palette=color_map, alpha=.5)
         plt.axhline(0, linestyle=":", color="grey")
         fig_path = f"user_data/{self.user_name}/metaprogram_flow_{self.user_id}.png"
         plt.title(f"{self.user_name} MetaPrograms Flow")

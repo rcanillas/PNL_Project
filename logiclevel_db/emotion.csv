@@ -1,5 +1,5 @@
-logical_level,sentence
-emotion,senti
-emotion,triste
-emotion,joyeux
-emotion,en colère
+emotion,sentence
+1,senti
+1,triste
+1,joyeux
+1,en colère

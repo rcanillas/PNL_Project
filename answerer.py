@@ -3,6 +3,7 @@ import random
 from sklearn.neighbors import NearestNeighbors
 import math
 from collections import defaultdict
+from pprint import pprint
 
 answ_list = pd.read_csv("templates/meta_answers.csv")
 answ_corpus = answ_list.drop(["text"], axis=1)
@@ -25,7 +26,7 @@ class ResponseStrategy:
                 if len(self.previously_selected[depth_meter]) < len(answer_list):
                     answer = self.select_depth_answer(answer_list, depth_meter, target_profile)
                 else:
-                    answer = self.select_depth_answer(answer_list, depth_meter+1, target_profile)
+                    answer = self.select_depth_answer(answer_list, depth_meter + 1, target_profile)
         else:
             answer = "Je pense que nous avons fait le tour de la question ! Voici votre profil\n" + f"{target_profile}"
         return answer
@@ -34,18 +35,39 @@ class ResponseStrategy:
         answer = ""
         if self.strategy == "nearest_neighbors":
             answer_list = pd.read_csv("templates/meta_answers.csv")
-            print(list(target_profile.values()))
+            #print(list(target_profile.values()))
             distances, indices = nn_model.kneighbors([list(target_profile.values())])
             ref_answer = indices[0][0]
-            print(ref_answer, indices)
+            #print(ref_answer, indices)
             answer = answer_list.iloc[ref_answer]['text']
-            print(answer)
+            #print(answer)
         if self.strategy == "depth_analysis":
             answer_list = pd.read_csv("templates/depth_answers.csv")
-            depth_meter = math.floor((nb_answers-1)/3)
+            depth_meter = math.floor((nb_answers - 1) / 3)
             answer = self.select_depth_answer(answer_list, depth_meter, target_profile)
 
         return answer
+
+
+def _select_metaprogram(sentence_profile):
+    metaprograms_absolute_dict = {}
+    for key in sentence_profile.keys():
+        metaprogram_score = sentence_profile[key]
+        metaprogram_key = key.split("_")
+        if key != "ref_externe_interne":
+            metaprogram_neg = metaprogram_key[0]
+            metaprogram_pos = metaprogram_key[1]
+        else:
+            metaprogram_neg = metaprogram_key[1]
+            metaprogram_pos = metaprogram_key[2]
+        if metaprogram_score < 0:
+            metaprograms_absolute_dict[metaprogram_neg] = metaprogram_score
+            metaprograms_absolute_dict[metaprogram_pos] = 0
+        else:
+            metaprograms_absolute_dict[metaprogram_neg] = 0
+            metaprograms_absolute_dict[metaprogram_pos] = metaprogram_score
+    print(metaprograms_absolute_dict)
+    return metaprograms_absolute_dict
 
 
 class Answerer:
@@ -71,34 +93,14 @@ class Answerer:
         # TODO: check if "text" in columns here
         return self
 
-    @staticmethod
-    def _select_metaprogram(sentence_profile):
-        metaprogram = None
-        max_value = 0
-        for key in sentence_profile.keys():
-            metaprogram_score = sentence_profile[key]
-            if abs(metaprogram_score) > 0:
-                if abs(metaprogram_score) > max_value:
-                    metaprogram_key = key.split("_")
-                    if key != "ref_externe_interne":
-                        metaprogram_neg = metaprogram_key[0]
-                        metaprogram_pos = metaprogram_key[1]
-                    else:
-                        metaprogram_neg = metaprogram_key[1]
-                        metaprogram_pos = metaprogram_key[2]
-                    if metaprogram_score < 0:
-                        metaprogram = metaprogram_neg
-                    else:
-                        metaprogram = metaprogram_pos
-                    max_value = metaprogram_score
-        return metaprogram, max_value
-
-    def update_conversation(self, message, sentence_profile, inversion):
-        sentences = message.split(".")
-        metaprogram, metaprogram_score = self._select_metaprogram(sentence_profile)
-        self.conversation_data = self.conversation_data.append([{"message": s, "type": "answer", "metaprogram": metaprogram, "metaprogram_score": metaprogram_score, "inversion": inversion}
-                                                                for s in sentences], ignore_index=True)
-        # self.nb_answers += 1
+    def update_conversation(self, sentence, sentence_profile, inversion):
+        update_dict = {"message": sentence, "message_id": self.nb_answers, "type": "answer", "inversion": inversion}
+        metaprograms_absolute = _select_metaprogram(sentence_profile)
+        for metaprogram, metaprogram_score in metaprograms_absolute.items():
+            update_dict[metaprogram] = metaprogram_score
+        self.conversation_data = self.conversation_data.append([update_dict], ignore_index=True)
+        pprint(self.conversation_data)
+        self.nb_answers += 1
         return self
 
     def update_target_profile(self, target_profile):
@@ -122,4 +124,5 @@ class Answerer:
 
 if __name__ == '__main__':
     import pytest
+
     pytest.main()

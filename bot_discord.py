@@ -36,22 +36,21 @@ async def on_ready():
 
 
 def update_info(current_sentence, session_answerer, session_modeler):
-    sentence_profile = session_modeler.compute_profile(current_sentence)
-    print(sentence_profile)
+    metaprogram_profile, logiclevel_profile = session_modeler.compute_profile(current_sentence)
     session_modeler = session_modeler.update_profile(current_sentence)
-    session_answerer.update_target_profile(session_modeler.profile)
-    print(session_modeler.profile)
+    session_answerer.update_target_profile(session_modeler.metaprogram_profile)
+    print(session_modeler.metaprogram_profile)
     if session_modeler.ref_sentence is None:
-        session_modeler.ref_sentence = sentence_profile
+        session_modeler.ref_sentence = metaprogram_profile
         inv_found = False
         inv_columns = None
     else:
-        inv_found, inv_columns = session_modeler.check_inversion(sentence_profile)
+        inv_found, inv_columns = session_modeler.check_inversion(metaprogram_profile)
     print(inv_found)
     if inv_found:
         print(f"Inversion found in column {[c for c in inv_columns]} !")
-    session_answerer.update_conversation(current_sentence, sentence_profile, inv_found)
-    session_answerer.ref_profile = sentence_profile
+    session_answerer.update_conversation(current_sentence, metaprogram_profile, inv_found)
+    session_answerer.ref_profile = metaprogram_profile
     return session_answerer, session_modeler
 
 
@@ -113,12 +112,12 @@ async def on_message(message):
                 active_sessions[target_name] = False
                 if not os.path.exists(f"{prefix}/{str_author}"):
                     os.makedirs(f"{prefix}/{str_author}")
-                print(target_modelers[target_name].profile)
+                print(target_modelers[target_name].metaprogram_profile)
                 target_answerers[target_name].save_conversation_data(
                     f"{prefix}/{str_author}/{str_author}_{datetime.now()}_{session_count[target_name]}.csv")
                 target_modelers[target_name].save_profile(f"{prefix}/{str_author}/{str_author}_profile.json")
                 exporter = PdfExporter(f"{str_author}_{datetime.now()}")
-                exporter.generate_report_image(target_modelers[target_name].profile)
+                exporter.generate_report_image(target_modelers[target_name].metaprogram_profile)
                 exporter.generate_flow_image(target_answerers[target_name].conversation_data)
                 exporter.write_report(target_answerers[target_name].conversation_data)
             else:
