@@ -441,3 +441,40 @@ Détection des niveaux logiques - code en place, manque références
 Que faire avec cette information ?
 - Ajouter au rapport ? 
 - Modifier la question posée ? 
+
+
+# Session 2 17/09 
+Groupe de mots / mots clés rangent phrases dans niveau logique
+Question peut porter sur un niveau logique en particulier
+- Environnement: Ou, avec qui, combien, quand ? Avoir
+- Comportement: Quoi ? Faire
+- Stratégies: Comment ? Pouvoir
+- Emotions: Quel effet ? Ressentir
+- Valeurs: Pourquoi ? Croire / Croyances
+- Identité: Qui ? Etre ? Contribuer / Mission
+- Vision: Au service de quoi, de qui ? Appartenir / Appartenance
+
+Proposer des questions très précises sur les niveaux logiques.
+Questions orientent les niveaux logiques, analyse des niveaux logiques pour confirmer
+Reformuler -> outil puissant 
+Coach -> Répète la phrase pour que la personne se rende bien compte 
+Reformulation pour le bot, plutot moyen de "confirmer" la réponse. 
+Si bot pose question sur un niveau logique, et que personne répond un truc qui n'a rien à voir,
+on peut détecter une "dissonance".
+
+Faire en sorte de ne pas poser deux fois la même question de suite pour stratégie depth.
+
+Aller voir les investisseurs en mettant un pied dans la porte : parler du journal intime sur le portable.
+
+Si on s'arrête à émotions, ça passe.
+
+Idéal - Pouvoir reformuler le message de quelqu'un dans la question. - nécessite une connaissance grammaticale.
+
+
+Message d'intro: Points à revoir:
+- Remplacer "meilleurs vecteurs ... personnalité" par "Afin de mieux comprendre la manière dont tu communiques (consciemment ou inconsciemment)". "personnalité" -> "Chaque personne est différente et c'est pour cela que j'adapte mon analyse à chaque interlocuteur."
+Nécessité de faire un message plus "corporate".
+- "tu souhaiteras améliorer" -> "Un élément de ta vie que tu trouves compliqué ou difficile, et que tu souhaiterais partager afin que l'on puisse ensemble l'analyser en profondeur" 
+- "vécue" -> "vécu(e)"
+
+Mettre le bot à la troisième personne ? 

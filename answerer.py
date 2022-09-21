@@ -20,15 +20,15 @@ class ResponseStrategy:
             answers = answer_list.loc[answer_list["depth"] == depth_meter]["text"]
             # print(answers)
             answer = random.choice(answers.values)
-            if answer not in self.previously_selected:
+            if answer not in self.previously_selected[depth_meter]:
                 self.previously_selected[depth_meter].append(answer)
             else:
-                if len(self.previously_selected[depth_meter]) < len(answer_list):
+                if len(self.previously_selected[depth_meter]) < len(answers):
                     answer = self.select_depth_answer(answer_list, depth_meter, target_profile)
                 else:
-                    answer = self.select_depth_answer(answer_list, depth_meter + 1, target_profile)
+                    answer = None
         else:
-            answer = "Je pense que nous avons fait le tour de la question ! Voici votre profil\n" + f"{target_profile}"
+            answer = "Nous avons fait le tour de la question ! Voici votre profil\n" + f"{target_profile}"
         return answer
 
     def select_answer(self, target_profile, nb_answers=0):
@@ -45,7 +45,8 @@ class ResponseStrategy:
             answer_list = pd.read_csv("templates/depth_answers.csv")
             depth_meter = math.floor((nb_answers - 1) / 3)
             answer = self.select_depth_answer(answer_list, depth_meter, target_profile)
-
+            if not answer:
+                answer = self.select_depth_answer(answer_list, depth_meter + 1, target_profile)
         return answer
 
 
@@ -53,7 +54,8 @@ def _select_metaprogram(sentence_profile):
     metaprograms_absolute_dict = {}
     for key in sentence_profile.keys():
         metaprogram_score = sentence_profile[key]
-        metaprogram_key = key.split("_")
+        metaprogram_key = key
+        """
         if key != "ref_externe_interne":
             metaprogram_neg = metaprogram_key[0]
             metaprogram_pos = metaprogram_key[1]
@@ -66,6 +68,8 @@ def _select_metaprogram(sentence_profile):
         else:
             metaprograms_absolute_dict[metaprogram_neg] = 0
             metaprograms_absolute_dict[metaprogram_pos] = metaprogram_score
+    """
+        metaprograms_absolute_dict[metaprogram_key] = metaprogram_score
     print(metaprograms_absolute_dict)
     return metaprograms_absolute_dict
 

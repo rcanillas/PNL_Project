@@ -45,9 +45,9 @@ class PdfExporter:
         if self.report_img is not None:
             self.canvas.image(self.report_img, w=floor(self.canvas.w - (self.canvas.w * 0.1)))
         y = 5
-        for key in color_map.keys():
+        for key in color_map_columns.keys():
             if key is not None:
-                color = color_map[key]
+                color = color_map_columns[key]
                 self.canvas.set_text_color(r=color[0], g=color[1], b=color[2])
                 self.canvas.cell(self.canvas.w - 2*self.canvas.l_margin, y, key)
                 self.canvas.ln()
@@ -89,19 +89,19 @@ class PdfExporter:
         return fig_path
 
     def generate_flow_image(self, report_df):
-        answ_df = report_df.loc[report_df["type"]=="answer"]
+        answ_df = report_df.loc[report_df["type"] == "answer"]
         flow_df = pd.DataFrame()
         mp_count = defaultdict(int)
         for msg_id, msg_info in enumerate(answ_df.to_dict(orient="records")):
             print(msg_info)
-            for metaprogram in color_map.keys():
+            for metaprogram in color_map_columns.keys():
                 mp_count[metaprogram] += msg_info[metaprogram]
-                flow_dict = {"msg_id": msg_id,"metaprogam": metaprogram, "score": mp_count[metaprogram]}
+                flow_dict = {"msg_id": msg_id, "metaprogam": metaprogram, "score": mp_count[metaprogram]}
                 flow_df = flow_df.append([flow_dict]).reset_index(drop=True)
         print(flow_df)
         plt.figure(figsize=(20, 10))
         sns.lineplot(data=flow_df, x="msg_id", y="score", hue="metaprogam",
-                     linestyle=":", marker="o", palette=color_map, alpha=.5)
+                     linestyle=":", marker="o", palette=color_map_columns, alpha=1)
         plt.axhline(0, linestyle=":", color="grey")
         fig_path = f"user_data/{self.user_name}/metaprogram_flow_{self.user_id}.png"
         plt.title(f"{self.user_name} MetaPrograms Flow")

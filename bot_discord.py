@@ -85,9 +85,9 @@ async def on_message(message):
                 time.sleep(1)
                 await message.channel.send(f"Bonjour {target_name} !")
                 time.sleep(.7)
-                await message.channel.send(f"Je suis {bot_name}, le robot qui écoute les problèmes ! Mon rôle est de déchiffrer tes 'méta-programmes' afin d'identifier les meilleurs vecteurs d'amélioration selon ta personnalité.")
+                await message.channel.send(f"Je suis {bot_name}, le robot qui écoute les problèmes ! Mon rôle est de déchiffrer tes 'méta-programmes' afin de mieux comprendre la manière dont tu communiques (consciemment ou inconsciemment). Chaque personne est différente et c'est pour cela que j'adapte mon analyse à chaque interlocuteur.")
                 time.sleep(1.5)
-                await message.channel.send("Ainsi, j'aimerais que tu me parles d'un élément de ta vie que tu souhaiterais améliorer afin que l'on puisse ensemble l'analyser en profondeur. Cela peut être lié aux hobbies, au travail, aux relations ...")
+                await message.channel.send("Ainsi, j'aimerais que tu me parles d'un élément de ta vie que tu trouves compliqué ou difficile, et que tu souhaiterais partager afin que l'on puisse ensemble l'analyser en profondeur. Cela peut être lié aux hobbies, au travail, aux relations ...")
                 time.sleep(1.5)
                 await message.channel.send(
                     "Le meilleur moyen pour moi de t'aider est de partir d'une situation précise que tu as vécue, où tu aurais aimé que les choses se passent mieux !")
@@ -142,11 +142,12 @@ async def on_message(message):
                     if sentence_list[-1] == "":
                         sentence_buffer[target_name] = ""
                         session_answerer.nb_answers = msg_count[target_name]
-                        session_answerer.response_strategy.strategy = random.choice(["depth_analysis",
-                                                                                     "nearest_neighbors"])
+                        #session_answerer.response_strategy.strategy = random.choice(["depth_analysis",
+                        #                                                             "nearest_neighbors"])
+                        session_answerer.response_strategy.strategy = "depth_analysis"
                         print(session_answerer.response_strategy.strategy)
                         response = session_answerer.get_answer()
-                        response_time = min(1.0, 0.2 * len(message.content.split(" ")))
+                        response_time = max(1.5, 0.2 * len(message.content.split(" ")))
                         time.sleep(response_time)
                         await message.channel.send(response)
                     else:
